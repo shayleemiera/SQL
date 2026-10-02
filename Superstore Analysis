@@ -49,3 +49,4 @@ where category = "Kitchen Supplies";
 Select average_rating, Item_name, category
 From superstore
 order by category;
+
