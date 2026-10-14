@@ -38,3 +38,10 @@ FROM bank_products
 WHERE product_type="Savings"
 AND interest_rate>=0.75
 AND monthly_fee=0;
+
+#4) Find the product name that includes "youth" in the title.
+SELECT product_name
+, interest_rate 
+FROM bank_products
+WHERE Product_name LIKE '%Youth%'
+;
