@@ -1,0 +1,60 @@
+CREATE TABLE bank_products (
+    product_id INTEGER PRIMARY KEY,
+    product_name TEXT,
+    product_type TEXT,
+    interest_rate DECIMAL(5, 2),
+    monthly_fee DECIMAL(6, 2),
+    minimum_balance DECIMAL(10, 2),
+    description TEXT
+);
+
+INSERT INTO bank_products (product_id, product_name, product_type, interest_rate, monthly_fee, minimum_balance, description)
+VALUES
+(1, 'Basic Checking', 'Checking', 0.00, 5.00, 0.00, 'No minimum balance required.'),
+(2, 'Premium Checking', 'Checking', 0.00, 10.00, 1000.00, 'Offers additional benefits.'),
+(3, 'Business Checking', 'Checking', 0.00, 15.00, 5000.00, 'Designed for business needs.'),
+(4, 'Student Checking', 'Checking', 0.00, 3.00, 0.00, 'No minimum balance. Low monthly fee for students.'),
+(5, 'Basic Savings', 'Savings', 0.20, 0.00, 100.00, 'Offers competitive interest rates.'),
+(6, 'High Yield Savings', 'Savings', 1.00, 0.00, 5000.00, 'High interest rates for higher balances.'),
+(7, 'Student Savings', 'Savings', 0.20, 0.00, 0.00, 'No minimum balance. Low interest rate for students.'),
+(8, 'Senior Savings', 'Savings', 0.50, 0.00, 100.00, 'Designed for seniors.'),
+(9, 'Youth Savings', 'Savings', 0.30, 0.00, 10.00, 'Low minimum balance and interest rate suitable for young account holders.'),
+(10, 'Auto Loan', 'Loan', 4.00, 0.00, 0.00, 'Financing for new or used cars.'),
+(11, 'Mortgage', 'Loan', 3.50, 0.00, 0.00, 'Home mortgage loans.'),
+(12, 'Cash Back Rewards Card', 'Credit Card', 16.00, 5.00, 0.00, 'Offers cash back on purchases.'),
+(13, 'Platinum Credit Card', 'Credit Card', 18.00, 0.00, 0.00, 'Rewards and cash back.'),
+(14, 'Gold Credit Card', 'Credit Card', 20.00, 10.00, 0.00, 'Higher credit limits.'),
+(15, 'Student Credit Card', 'Credit Card', 22.00, 5.00, 0.00, 'Designed for students.')
+;
+
+SELECT product_name
+, description
+FROM bank_products
+WHERE product_name ='Premium Checking'
+OR product_name ='High Yield Savings'
+OR product_name ='Platinum Credit Card'
+OR product_name ='Gold Credit Card'
+;
+
+#1. Rewrite the former query.
+
+SELECT product_name
+, description
+FROM bank_products
+WHERE product_name IN ('Premium Checking', 'High Yield Savings', 'Platinum Credit Card', 'Gold Credit Card')
+;
+
+#2. List the product name that starts with the word “Business”.
+SELECT product_name
+, description
+FROM bank_products
+WHERE product_name LIKE "business%"
+;
+
+#3. A new customer wants something with rewards.
+SELECT product_name
+, description
+FROM bank_products
+WHERE product_name LIKE "%rewards%"
+OR description LIKE "%rewards%"
+;
