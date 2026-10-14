@@ -1,0 +1,40 @@
+CREATE TABLE bank_products (
+    product_id INTEGER PRIMARY KEY,
+    product_name TEXT,
+    product_type TEXT,
+    interest_rate DECIMAL(5, 2),
+    monthly_fee DECIMAL(6, 2),
+    minimum_balance DECIMAL(10, 2),
+    description TEXT
+);
+
+INSERT INTO bank_products (product_id, product_name, product_type, interest_rate, monthly_fee, minimum_balance, description)
+VALUES
+(1, 'Basic Checking', 'Checking', 0.00, 5.00, 0.00, 'No minimum balance required.'),
+(2, 'Premium Checking', 'Checking', 0.00, 10.00, 1000.00, 'Offers additional benefits.'),
+(3, 'Business Checking', 'Checking', 0.00, 15.00, 5000.00, 'Designed for business needs.'),
+(4, 'Student Checking', 'Checking', 0.00, 3.00, 0.00, 'No minimum balance. Low monthly fee for students.'),
+(5, 'Basic Savings', 'Savings', 0.20, 0.00, 100.00, 'Offers competitive interest rates.'),
+(6, 'High Yield Savings', 'Savings', 1.00, 0.00, 5000.00, 'High interest rates for higher balances.'),
+
+
+
+#1) The customer would like to know what kind of accounts your bank offers. Display all the bank product names.
+
+SELECT product_name 
+FROM bank_products;
+
+#2) This customer is interested in opening a Checking or Savings account, but wants more information on the options. 
+
+SELECT product_name
+FROM bank_products
+WHERE product_type="Checking"
+OR product_type="Savings";
+
+#3) The customer decided they want a savings account with a good interest rate and no monthly fee.
+
+SELECT product_name, interest_rate
+FROM bank_products
+WHERE product_type="Savings"
+AND interest_rate>=0.75
+AND monthly_fee=0;
