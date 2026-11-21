@@ -1,0 +1,69 @@
+CREATE TABLE billing (
+    patient_id INTEGER
+  	, insurance_provider TEXT
+    , procedure_code INTEGER
+    , procedure_description TEXT
+    , procedure_cost REAL
+    , procedure_bill REAL
+    , payment_received REAL
+);
+
+
+INSERT INTO billing (patient_id, insurance_provider, procedure_code, procedure_description, procedure_cost, procedure_bill, payment_received)
+VALUES
+    (137845, 'Insurance A', 42213, 'Office Visit', 335.00, 83.75, 35.00)
+  , (137845, 'Insurance A', 80525,	'Complete Blood Count',	225.00,	56.25, 25.00)
+  , (187738, 'Insurance C', 42213, 'Office Visit', 335.00, 50.25, 35.00)
+  , (187738, 'Insurance C', 85706, 'ECG', 425.00, 63.75, 50.00)
+  , (214007, 'Insurance A', 42213, 'Office Visit', 335.00, 83.75, 30.00)
+  , (214007, 'Insurance A', 80048, 'Basic Metabolic Panel', 200.00, 50.00, 0.00)
+  , (214007, 'Insurance A', 80525, 'Complete Blood Count', 225.00, 56.25, 0.00)
+  , (250077, 'Insurance B', 42213, 'Office Visit', 335.00, 117.25, 85.00)
+  , (250077, 'Insurance B', 80525, 'Complete Blood Count', 225.00, 78.75, 0.00)
+  , (281938, 'Insurance B', 80449, 'Glucose Tolerance Test', 150.00, 52.50, 15.00)
+  , (296309, 'Insurance C', 42213, 'Office Visit', 335.00, 50.25, 30.00)
+  , (296309, 'Insurance C', 80525, 'Complete Blood Count', 225.00, 33.75, 25.00)
+  , (301544, 'Insurance C', 80061, 'Lipid Panel', 135.00, 20.25, 20.25)
+  , (390731, 'Insurance B', 42213, 'Office Visit', 335.00, 117.25, 50.00)
+  , (390731, 'Insurance B', 80048, 'Basic Metabolic Panel', 200.00, 70.00, 0.00)
+  , (390731, 'Insurance B', 80449, 'Glucose Tolerance Test', 150.00, 52.50, 0.00)
+    ;
+
+Step 1: View each patient's total remaining payment, accounting for multiple bills
+
+SELECT patient_id 
+, SUM(procedure_bill - payment_received)AS payment_remaining 
+FROM billing
+Group BY patient_id
+;
+
+
+Step 2: Add a line to the previous query so that only patients with more than $150 remaining on their payment are displayed.
+
+SELECT patient_id 
+, SUM(procedure_bill - payment_received)AS payment_remaining 
+FROM billing
+Group BY patient_id
+HAVING payment_remaining > 150
+;
+
+
+Step 3: Display the insurance providers and the number of patient bills covered by each provider for lab tests (lab test procedure codes all begin with “80”). Call the new column lab_bills.
+
+SELECT patient_id
+, COUNT(procedure_bill) AS lab_bills
+FROM billing
+WHERE procedure_code LIKE '80%'
+GROUP BY insurance_provider
+;
+
+
+Step 4: Add a line to the previous query to display only insurance companies that have billed more than 3 lab procedures.
+
+SELECT patient_id
+, COUNT(procedure_bill) AS lab_bills
+FROM billing
+WHERE procedure_code LIKE '80%'
+GROUP BY insurance_provider
+HAVING COUNT(procedure_bill) > 3
+;
