@@ -1,0 +1,80 @@
+CREATE TABLE billing (
+    patient_id INTEGER
+  	, insurance_provider TEXT
+    , procedure_code INTEGER
+    , procedure_description TEXT
+    , procedure_cost REAL
+    , procedure_bill REAL
+    , payment_received REAL
+);
+
+
+INSERT INTO billing (patient_id, insurance_provider, procedure_code, procedure_description, procedure_cost, procedure_bill, payment_received)
+VALUES
+    (137845, 'Insurance A', 42213, 'Office Visit', 335.00, 83.75, 35.00)
+  , (187738, 'Insurance C', 85706, 'ECG', 425.00, 63.75, 50.00)
+  , (214007, 'Insurance A', 80048, 'Basic Metabolic Panel', 200.00, 50.00, 0.00)
+  , (250077, 'Insurance B', 80525, 'Complete Blood Count', 225.00, 78.75, 0.00)
+  , (281938, 'Insurance B', 80449, 'Glucose Tolerance Test', 150.00, 52.50, 15.00)
+  , (296309, 'Insurance C', 42213, 'Office Visit', 335.00, 50.25, 30.00)
+  , (301544, 'Insurance C', 80061, 'Lipid Panel', 135.00, 20.25, 20.25)
+  , (390731, 'Insurance B', 80449, 'Glucose Tolerance Test', 150.00, 52.50, 0.00)
+    ;
+
+
+Step 1: Some patients have already made payments toward their bill and we’d like to see how much each patient has remaining.
+        Display the patient ID and create a new column that calculates how much each patient still needs to pay. Call the new column payment_remaining.
+
+SELECT patient_id
+, procedure_bill - payment_received AS payment_remaining
+FROM billing;
+
+
+Step 2: What fraction of their bill has each patient paid so far?
+
+SELECT patient_id
+, procedure_bill
+, payment_received / procedure_bill AS payment_fraction
+FROM billing
+ORDER BY payment_fraction ASC;
+
+
+Step 3: Display the patient ID, payment_fraction (copy from the previous query), and add a column displaying the percent of the bill that the patient has paid, rounded to one place. Call the new column payment_percent.
+
+SELECT patient_id
+, payment_received / procedure_bill AS payment_fraction
+, ROUND((payment_received / procedure_bill)*100, 1) AS payment_percent
+FROM billing;
+
+
+Step 4: Display the patient ID, the payment_fraction column from query #2, and a new column titled payment_status, which categorizes the payment_fraction column into three categories: For 100% payment, write “paid”. If the payment is less than 100% but more than 0%, use “in progress”. If the patient hasn’t made a payment, write “no payment”.
+
+SELECT patient_id
+, payment_received / procedure_bill AS payment_fraction
+, CASE
+	WHEN (payment_received / procedure_bill) = 1 then "paid"
+ 	WHEN (payment_received / procedure_bill) = 0 then "no payment"
+ELSE "in progress"
+END AS payment_status
+From billing;
+
+
+Step 5: Alter the previous query to create more categories in payment_status.
+- If someone has paid 100% of their bill, write "paid"
+- if someone has paid 0%, write “no payment”
+- If the patient has paid 75% or more, write "75%+".
+- Do the same for 50% and 25%
+- If the number is under 25%, write "Under 25%"
+- name the column payment_status
+
+SELECT patient_id
+, payment_received / procedure_bill AS payment_fraction
+, CASE
+	WHEN (payment_received / procedure_bill) = 1 then "paid"
+    WHEN (payment_received / procedure_bill)= 0 then "no payment"
+ 	WHEN (payment_received / procedure_bill) >= 0.75 then "75%+"
+    WHEN (payment_received / procedure_bill) >= 0.50 then "50%+"
+    WHEN (payment_received / procedure_bill) >= 0.25 then "25%+"
+ELSE "Under 25%"
+END AS payment_status
+From billing;
